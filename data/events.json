@@ -1,0 +1,32 @@
+{
+    "events": [
+      {
+        "id": 1,
+        "title": "Riunione con il team",
+        "date": "2024-12-20",
+        "time": "10:00",
+        "description": "Discussione del piano strategico per il primo trimestre.",
+        "location": "Sala riunioni 3A",
+        "tags": ["lavoro", "riunione"]
+      },
+      {
+        "id": 2,
+        "title": "Dentista",
+        "date": "2024-12-21",
+        "time": "15:30",
+        "description": "Pulizia dentale annuale.",
+        "location": "Studio dentistico Dr. Rossi",
+        "tags": ["salute", "personale"]
+      },
+      {
+        "id": 3,
+        "title": "Compleanno di Luca",
+        "date": "2024-12-22",
+        "time": "18:00",
+        "description": "Cena per festeggiare il compleanno di Luca.",
+        "location": "Ristorante La Terrazza",
+        "tags": ["sociale", "festività"]
+      }
+    ]
+  }
+  
