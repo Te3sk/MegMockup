@@ -27,6 +27,8 @@ def validate_time(time_str):
         bool: True if the time is valid, False otherwise.
     """
     try:
+        if time_str == "":
+            return False
         datetime.strptime(time_str, "%H:%M")
         return True
     except ValueError:

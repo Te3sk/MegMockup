@@ -36,8 +36,12 @@ def add_event(title, date, time, description, location):
     events = fu.load_events()
 
     # Validate the date and time
-    if du.validate_date(date) is False or du.validate_time(time) is False:
+    if du.validate_date(date) is False:
         return "Error: Invalid date or time. Please try again."
+    
+    if time != "":
+        if du.validate_time(time) is False:
+            return "Error: Invalid date or time. Please try again."
 
     # Generate a new ID and create the event
     new_event = {
