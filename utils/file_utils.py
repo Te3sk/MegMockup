@@ -1,4 +1,6 @@
 import json
+import os
+import inspect
 
 # Path to the JSON file
 EVENTS_FILE = "../data/events.json"
@@ -36,8 +38,26 @@ def save_events(events):
         FileNotFoundError: If the specified file cannot be found.
         IOError: If an error occurs while writing to the file.
     """
-    with open(EVENTS_FILE, "w", encoding="utf-8") as file:
-        json.dump({"events": events}, file, indent=4, ensure_ascii=False)
+    import os
+    import time
+
+    # TODO - temp debug print
+    print(f"{__file__}\\{inspect.currentframe().f_code.co_name} - Saving to: {EVENTS_FILE}")
+    print(f"{__file__}\\{inspect.currentframe().f_code.co_name} - Events to save: {events}")
+
+    try:
+        with open(EVENTS_FILE, "w", encoding="utf-8") as file:
+            json.dump({"events": events}, file, indent=4, ensure_ascii=False)
+            file.flush()
+            os.fsync(file.fileno())
+
+        print(f"{__file__}/{inspect.currentframe().f_code.co_name} - Events saved successfully")
+        time.sleep(1)  # Garantisce che il sistema completi l'operazione
+
+    except Exception as e:
+        print(f"{__file__}/{inspect.currentframe().f_code.co_name} - An error occurred: {e}")
+        raise
+
 
 def clear_calendar():
     """

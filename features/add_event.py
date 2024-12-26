@@ -42,9 +42,6 @@ def input_field(stdscr, prompt, max_length=None, optional=False, validation=None
 
 
 def add_event(stdscr):
-    """
-    Permette all'utente di inserire i dettagli di un evento.
-    """
     # Input obbligatori
     title = input_field(stdscr, "Titolo (max 25 caratteri): ", max_length=30)
     date = input_field(stdscr, "Data (formato yyyy-mm-dd): ", validation=lambda x: re.match(r"\d{4}-\d{2}-\d{2}", x), error_message="Formato data non valido, usa yyyy-mm-dd.")
@@ -60,7 +57,7 @@ def add_event(stdscr):
     
     em.add_event(title, date, time, description, location)
 
-    # return title, date, time, description, location, tags
+    return title, date, time, description, location, tags
 
 
 def main(stdscr):
@@ -76,8 +73,9 @@ def main(stdscr):
     stdscr.addstr(5, 0, f"Descrizione: {event[3]}")
     stdscr.addstr(6, 0, f"Location: {event[4]}")
     stdscr.addstr(7, 0, f"Tag: {', '.join(event[5]) if event[5] else 'Nessuno'}")
-    stdscr.refresh()
+    
     stdscr.getch()
+    stdscr.refresh()
 
 
 if __name__ == '__main__':

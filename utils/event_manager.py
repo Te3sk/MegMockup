@@ -1,6 +1,7 @@
 from datetime import datetime
-from utils import file_utils as fu
-from utils import date_utils as du
+from . import file_utils as fu
+from . import date_utils as du
+import inspect
 
 # Path to the JSON file
 EVENTS_FILE = "../data/events.json"
@@ -33,7 +34,13 @@ def add_event(title, date, time, description, location):
     Returns:
         str: An error message if the date or time are invalid, otherwise None.
     """
+    
+    print("enter in utils/add_event")
+
     events = fu.load_events()
+
+    # TODO - temp debug print
+    print(f"{__file__}\\{inspect.currentframe().f_code.co_name} - event json loaded: {events}")
 
     # Validate the date and time
     if du.validate_date(date) is False:
@@ -42,6 +49,9 @@ def add_event(title, date, time, description, location):
     if time != "":
         if du.validate_time(time) is False:
             return "Error: Invalid date or time. Please try again."
+        
+    # TODO - temp debug print
+    print(f"{__file__}\\{inspect.currentframe().f_code.co_name} - date and time validated")
 
     # Generate a new ID and create the event
     new_event = {
@@ -210,3 +220,14 @@ def tomorrow_events():
     tomorrow = du.add_days(du.get_current_date(), 1)
     return get_events_by_date(tomorrow)
 
+def main():
+    print("This is the main function of the event_manager module.")
+    title = input("title: ")
+    date = input("date (yyyy-mm-dd): ")
+    time = input("time (hh:mm): ")
+    description = input("description: ")
+    location = input("location: ")
+    add_event(title, date, time, description, location)
+
+if __name__ == "__main__":
+    main()

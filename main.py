@@ -1,11 +1,26 @@
 # Punto di ingresso dell'app
-import features 
+from features import add_event 
+from utils import event_manager as em
 import curses
+from datetime import datetime
+import inspect
 
-import features.add_event  # Import the curses module for building command-line user interfaces.
 
-def menu_navigation(stdscr, options):
-# Disable the cursor for better visual appearance
+def menu_navigation(stdscr, options, message=None):
+    """
+    Displays a menu and handles navigation using the curses library.
+    Args:
+        stdscr: The curses window object.
+        options (list of str): A list of menu options to display.
+    Returns:
+        int: The index of the selected option if ENTER is pressed.
+            Returns None if the "Esci" option is selected or ESC is pressed.
+    The function uses the curses library to create a simple text-based menu.
+    It highlights the currently selected option and allows the user to navigate
+    using the UP and DOWN arrow keys. The ENTER key selects an option, and the
+    ESC key exits the menu.
+    """
+    # Disable the cursor for better visual appearance
     curses.curs_set(0)
     # Enable color support (optional)
     curses.start_color()
@@ -25,6 +40,11 @@ def menu_navigation(stdscr, options):
         # Get the screen dimensions (height and width)
         h, w = stdscr.getmaxyx()
         
+        # Display the optional message if provided (not part of the menu)
+        if message is not None:
+            x_msg = max(0, w // 2 - len(message) // 2)  # Center the message horizontally
+            stdscr.addstr(1, x_msg, message, curses.A_BOLD)
+
         # Iterate over each option in the menu
         for idx, option in enumerate(options):
             # Calculate the horizontal position to center the text
@@ -68,17 +88,36 @@ def menu_navigation(stdscr, options):
         elif key == 27:
             break  # Exit the loop on ESC key press
 
+def today_event(stdscr):
+    today = datetime.now().strftime("%Y-%m-%d")
+    td_ev = em.get_events_by_date(today)
+    if td_ev != []:
+        idx = menu_navigation(stdscr, td_ev)
+        selected_event = td_ev[idx]
+        # TODO - temp debug print
+        print(f"{__file__}/{inspect.currentframe().f_code.co_name} - Selected event: {selected_event}")
+    else:
+        # Mostra il messaggio fisso
+        stdscr.clear()
+                
+        # Mostra solo il menu con "Indietro"
+        selected_idx = menu_navigation(stdscr, ["Indietro"], "Nessun evento per oggi")
+        
+        if selected_idx == 0:  # "Indietro"
+            return
+
+
 # Main menu function
 def main_menu(stdscr):
     # Define the list of menu options
     options = ['Aggiungi Evento', 'Eventi di Oggi', 'Eventi di Domani', 'Cerca Evento', 'Seleziona Giorno', 'Esci']
     selected_idx = menu_navigation(stdscr, options)
-    print(options[selected_idx])
     
     if selected_idx == 0:
-        features.add_event.add_event(stdscr)
+        add_event.main(stdscr)
+        main_menu(stdscr)
     elif selected_idx == 1:
-        print("eventi di oggi")
+        today_event(stdscr)
     elif selected_idx == 2:
         print("eventi di domani")
     elif selected_idx == 3:
